@@ -1,10 +1,10 @@
 cask "quotabar" do
   version "1.0.0"
-  sha256 "80a74727655ea9e00712d90c298955963315783e7b268a3504b4387e503b6a78"
+  sha256 "b67f7fffb622e634723be26f1f1558c8eb4dee67532395955bbcf966b78ecd41"
 
   url "https://github.com/ronit111/quotabar/releases/download/v#{version}/QuotaBar-#{version}.zip"
   name "QuotaBar"
-  desc "Menu bar tracker for AI usage limits and multi-account switching"
+  desc "Menu bar meter and account bank for running multiple Claude Code accounts"
   homepage "https://github.com/ronit111/quotabar"
 
   livecheck do
@@ -12,7 +12,7 @@ cask "quotabar" do
     strategy :github_latest
   end
 
-  depends_on macos: :sonoma
+  depends_on macos: ">= :sonoma"
 
   app "QuotaBar.app"
 
@@ -22,11 +22,20 @@ cask "quotabar" do
   ]
 
   caveats <<~EOS
-    QuotaBar is ad-hoc signed, not notarized with an Apple Developer ID. macOS Gatekeeper
-    will block it on first launch. To open it the first time:
-      * Right-click (or Control-click) QuotaBar.app in /Applications and choose Open,
-        then confirm in the dialog, OR
+    QuotaBar is ad-hoc signed, not notarized with an Apple Developer ID. macOS
+    Gatekeeper will block it on first launch. To open it the first time:
+      * Right-click (or Control-click) QuotaBar.app in /Applications and choose
+        Open, then confirm in the dialog, OR
       * open System Settings -> Privacy & Security and click "Open Anyway".
     This is required only once, and is inherent to ad-hoc signing.
+
+    QuotaBar reads your Claude Code login from the macOS Keychain and stores
+    banked account records under ~/.claude/accounts (0600). Nothing is sent
+    anywhere except api.anthropic.com's usage endpoint.
+
+    The account-bank helper scripts are bundled inside the app at
+    QuotaBar.app/Contents/Resources/account-bank. For the optional shell
+    integration (auto-pick hook, swap command), see the README:
+    https://github.com/ronit111/quotabar#install
   EOS
 end
